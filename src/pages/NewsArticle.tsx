@@ -164,25 +164,23 @@ const NewsArticle: React.FC = () => {
 
         {/* Hero Section */}
         <div className="relative bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700">
-          <div className="absolute inset-0 bg-black/30"></div>
-
           {/* Hero Image */}
-          <div className="relative h-[400px] lg:h-[500px] overflow-hidden">
+          <div className="relative h-[500px] lg:h-[600px] overflow-hidden">
             <img
               src={article.image}
               alt={article.title}
-              className="w-full h-full object-cover opacity-40"
+              className="w-full h-full object-contain bg-navy-900 dark:bg-gray-900"
               onError={handleImageError}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
           </div>
 
           {/* Article Header */}
-          <div className="absolute bottom-0 left-0 right-0 pb-8 lg:pb-12">
-            <div className="container mx-auto px-6">
-              <div className="max-w-4xl">
+          <div className="absolute bottom-0 left-0 right-0 pb-12 lg:pb-16">
+            <div className="container mx-auto px-6 lg:px-12 xl:px-24">
+              <div className="max-w-5xl mx-auto">
                 {/* Category & Meta */}
-                <div className="flex flex-wrap items-center gap-4 mb-4">
+                <div className="flex flex-wrap items-center gap-4 mb-6">
                   <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full">
                     {getCategoryIcon(article.category)}
                     {article.category}
@@ -200,12 +198,12 @@ const NewsArticle: React.FC = () => {
                 </div>
 
                 {/* Title */}
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6">
                   {article.title}
                 </h1>
 
                 {/* Excerpt */}
-                <p className="text-lg lg:text-xl text-gray-200 leading-relaxed max-w-3xl">
+                <p className="text-lg lg:text-xl text-gray-200 leading-relaxed">
                   {article.excerpt}
                 </p>
               </div>
@@ -214,9 +212,9 @@ const NewsArticle: React.FC = () => {
         </div>
 
         {/* Article Content */}
-        <div className="container mx-auto px-6 py-12 lg:py-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-12">
+        <div className="bg-white dark:bg-gray-800 py-12 lg:py-16">
+          <div className="container mx-auto px-6 lg:px-12 xl:px-24">
+            <div className="max-w-5xl mx-auto">
               {/* Article Body */}
               <div
                 className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-navy-900 dark:prose-headings:text-white prose-a:text-navy-600 dark:prose-a:text-yellow-400 prose-strong:text-navy-900 dark:prose-strong:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300"
@@ -383,6 +381,14 @@ const NewsArticle: React.FC = () => {
                   <Share2 className="w-5 h-5" />
                   Share Article
                 </button>
+
+                <button
+                  onClick={() => navigate('/news')}
+                  className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-navy-900 dark:text-white px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  Back to News
+                </button>
               </div>
             </div>
           </div>
@@ -390,43 +396,58 @@ const NewsArticle: React.FC = () => {
 
         {/* Related Articles */}
         {relatedArticles.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 py-16 border-t border-gray-200 dark:border-gray-700">
-            <div className="container mx-auto px-6">
-              <h2 className="text-3xl font-bold text-navy-900 dark:text-white mb-8">
-                Related Articles
-              </h2>
-              <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-gray-50 dark:bg-gray-900 py-16">
+            <div className="container mx-auto px-6 lg:px-12 xl:px-24">
+              <div className="max-w-7xl mx-auto">
+                <h2 className="text-3xl lg:text-4xl font-bold text-navy-900 dark:text-white mb-10">
+                  Related Articles
+                </h2>
+                <div className="grid md:grid-cols-3 gap-8">
                 {relatedArticles.map((relatedArticle) => (
                   <Link
                     key={relatedArticle.slug}
                     to={`/news/${relatedArticle.slug}`}
-                    className="group bg-gray-50 dark:bg-gray-900 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300"
+                    className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:transform hover:scale-[1.02]"
                   >
-                    <div className="aspect-video overflow-hidden">
+                    <div className="aspect-video overflow-hidden relative">
                       <img
                         src={relatedArticle.image}
                         alt={relatedArticle.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         onError={handleImageError}
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                      <div className="absolute top-4 left-4">
+                        <div className="flex items-center gap-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-navy-900 dark:text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                          {getCategoryIcon(relatedArticle.category)}
+                          {relatedArticle.category}
+                        </div>
+                      </div>
                     </div>
-                    <div className="p-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-2">
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
                         <Calendar className="w-4 h-4" />
                         {formatDate(relatedArticle.date)}
                       </div>
-                      <h3 className="font-bold text-navy-900 dark:text-white group-hover:text-navy-700 dark:group-hover:text-yellow-400 transition-colors line-clamp-2 mb-2">
+                      <h3 className="text-xl font-bold text-navy-900 dark:text-white group-hover:text-navy-700 dark:group-hover:text-yellow-400 transition-colors line-clamp-2 mb-3">
                         {relatedArticle.title}
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-3">
+                      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-3 mb-4">
                         {relatedArticle.excerpt}
                       </p>
-                      <div className="flex items-center gap-2 text-navy-600 dark:text-yellow-400 font-medium text-sm">
-                        Read More <ChevronRight className="w-4 h-4" />
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-navy-600 dark:text-yellow-400 font-semibold text-sm transition-colors duration-200 group-hover:gap-3">
+                          Read Article <ChevronRight className="w-4 h-4" />
+                        </div>
+                        <div className="text-xs text-gray-400 dark:text-gray-500">
+                          {Math.ceil(relatedArticle.content.length / 1000)} min read
+                        </div>
                       </div>
                     </div>
                   </Link>
                 ))}
+                </div>
               </div>
             </div>
           </div>
