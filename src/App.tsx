@@ -10,13 +10,12 @@ import Products from './pages/Products';
 import Services from './pages/Services';
 import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
-// import Blogs from './pages/Blogs';
 import Careers from './pages/Careers';
-
-
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { NavigationProvider } from './context/NavigationContext';
+import OrganizationSchema from './components/OrganizationSchema';
+import WebsiteSchema from './components/WebsiteSchema';
 
 // Component to scroll to top on route change
 const ScrollToTop: React.FC = () => {
@@ -36,6 +35,8 @@ function App() {
         <NavigationProvider>
           <Router>
             <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+              <OrganizationSchema />
+              <WebsiteSchema />
               <Navbar />
               <ScrollToTop />
               <main>

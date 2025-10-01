@@ -134,84 +134,33 @@ const NewsArticle: React.FC = () => {
       <SEOHead
         title={`${article.title} | Saher Flow Solutions News`}
         description={article.excerpt}
-        keywords={`${article.category}, Saher Flow Solutions, multiphase flow meter, DMOR technology, oil gas technology, Saudi Aramco, non-radioactive flow meter, flow measurement, Saudi Arabia, KAUST, Vision 2030`}
+        keywords={`${article.category}, Saher Flow Solutions, multiphase flow meter, oil gas technology`}
         url={`/news/${article.slug}`}
         image={article.image}
-        type="article"
-        publishedTime={article.date}
-        modifiedTime={article.date}
-        section={article.category}
-        tags={[article.category, 'Multiphase Flow Measurement', 'DMOR Technology', 'Oil and Gas']}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "NewsArticle",
           "headline": article.title,
           "description": article.excerpt,
-          "image": {
-            "@type": "ImageObject",
-            "url": article.image,
-            "width": 1200,
-            "height": 630
-          },
+          "image": article.image,
           "datePublished": article.date,
-          "dateModified": article.date,
           "author": {
             "@type": "Organization",
-            "@id": "https://saherflow.com/#organization",
             "name": "Saher Flow Solutions"
           },
           "publisher": {
             "@type": "Organization",
-            "@id": "https://saherflow.com/#organization",
             "name": "Saher Flow Solutions",
             "logo": {
               "@type": "ImageObject",
-              "url": "https://saherflow.com/wp-content/uploads/2021/06/Artboard-1-copy100.svg"
+              "url": "https://saherflow.com/logo.png"
             }
-          },
-          "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": `https://saherflow.com/news/${article.slug}`
-          },
-          "articleSection": article.category,
-          "keywords": `${article.category}, multiphase flow meter, DMOR technology, Saher Flow Solutions`,
-          "inLanguage": "en-US",
-          "about": {
-            "@type": "Thing",
-            "name": "Multiphase Flow Measurement",
-            "description": "Revolutionary DMOR technology for oil and gas industry"
           }
         }}
       />
 
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {
-              "@type": "ListItem",
-              "position": 1,
-              "name": "Home",
-              "item": "https://saherflow.com/"
-            },
-            {
-              "@type": "ListItem",
-              "position": 2,
-              "name": "News",
-              "item": "https://saherflow.com/news"
-            },
-            {
-              "@type": "ListItem",
-              "position": 3,
-              "name": article.title,
-              "item": `https://saherflow.com/news/${article.slug}`
-            }
-          ]
-        })}
-      </script>
-
       <article className="pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen">
+     
 
         {/* Hero Section */}
         <div className="relative bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700">
@@ -266,79 +215,71 @@ const NewsArticle: React.FC = () => {
 
         {/* Article Content */}
         <div className="container mx-auto px-6 py-12 lg:py-16">
-          <div className="max-w-5xl mx-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 sm:p-10 lg:p-16">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-12">
               {/* Article Body */}
               <div
-                className="prose prose-xl dark:prose-invert max-w-none prose-headings:text-navy-900 dark:prose-headings:text-white prose-a:text-navy-600 dark:prose-a:text-yellow-400 prose-strong:text-navy-900 dark:prose-strong:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300"
+                className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-navy-900 dark:prose-headings:text-white prose-a:text-navy-600 dark:prose-a:text-yellow-400 prose-strong:text-navy-900 dark:prose-strong:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300"
                 dangerouslySetInnerHTML={{ __html: article.content }}
               />
 
               <style jsx>{`
                 .prose {
-                  line-height: 1.85;
-                  max-width: 100%;
+                  line-height: 1.8;
                 }
                 .prose h1 {
-                  font-size: 2.75rem;
+                  font-size: 2.5rem;
                   font-weight: 800;
-                  margin-top: 3rem;
-                  margin-bottom: 1.75rem;
+                  margin-top: 2rem;
+                  margin-bottom: 1.5rem;
                   color: #1a3a5c;
-                  line-height: 1.25;
                 }
                 .prose h2 {
-                  font-size: 2.25rem;
+                  font-size: 2rem;
                   font-weight: 700;
-                  margin-top: 3rem;
-                  margin-bottom: 1.25rem;
-                  color: #1a3a5c;
-                  border-bottom: 3px solid #ffd500;
-                  padding-bottom: 0.75rem;
-                  line-height: 1.3;
-                }
-                .prose h3 {
-                  font-size: 1.75rem;
-                  font-weight: 600;
-                  margin-top: 2.5rem;
+                  margin-top: 2rem;
                   margin-bottom: 1rem;
                   color: #1a3a5c;
-                  line-height: 1.4;
+                  border-bottom: 2px solid #ffd500;
+                  padding-bottom: 0.5rem;
+                }
+                .prose h3 {
+                  font-size: 1.5rem;
+                  font-weight: 600;
+                  margin-top: 1.5rem;
+                  margin-bottom: 0.75rem;
+                  color: #1a3a5c;
                 }
                 .prose p {
-                  margin-bottom: 1.75rem;
-                  font-size: 1.175rem;
-                  line-height: 1.85;
+                  margin-bottom: 1.5rem;
+                  font-size: 1.1rem;
+                  line-height: 1.8;
                   color: #374151 !important;
-                  letter-spacing: 0.01em;
                 }
                 .dark .prose p {
                   color: #d1d5db !important;
                 }
                 .prose ul, .prose ol {
-                  margin: 2rem 0;
-                  padding-left: 2.5rem;
+                  margin: 1.5rem 0;
+                  padding-left: 2rem;
                 }
                 .prose li {
-                  margin-bottom: 1rem;
-                  font-size: 1.15rem;
-                  line-height: 1.8;
+                  margin-bottom: 0.75rem;
+                  font-size: 1.1rem;
+                  line-height: 1.7;
                   color: #374151 !important;
-                  padding-left: 0.5rem;
                 }
                 .dark .prose li {
                   color: #d1d5db !important;
                 }
                 .prose blockquote {
-                  border-left: 5px solid #ffd500;
+                  border-left: 4px solid #ffd500;
                   background: #f9fafb;
-                  padding: 2rem 2.5rem;
-                  margin: 2.5rem 0;
+                  padding: 1.5rem 2rem;
+                  margin: 2rem 0;
                   font-style: italic;
-                  font-size: 1.25rem;
+                  font-size: 1.2rem;
                   color: #1a3a5c;
-                  border-radius: 0.5rem;
-                  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
                 }
                 .prose table {
                   width: 100%;
