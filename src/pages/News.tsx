@@ -202,32 +202,55 @@ const News: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Latest News & Updates | Saher Flow Solutions"
-        description="Stay updated with latest news from Saher Flow Solutions. Saudi Aramco pre-qualification, field trials, awards, partnerships, and breakthrough developments in multiphase flow measurement."
-        keywords="Saher Flow news, Saudi Aramco pre-qualified, multiphase flow meter news, oil gas technology news, DMOR technology updates, flow measurement industry news"
+        title="Latest News & Updates | Saher Flow Solutions - Saudi Aramco Approved MPFM Technology"
+        description="Breaking news from Saher Flow Solutions: Saudi Aramco pre-qualification, successful field trials, industry awards, global partnerships, and innovations in non-radioactive multiphase flow measurement technology."
+        keywords="Saher Flow Solutions news, Saudi Aramco pre-qualified MPFM, multiphase flow meter news, oil gas technology news, DMOR technology updates, flow measurement industry news, non-radioactive flow meter, KAUST technology, Saudi Arabia innovation, Vision 2030, AI-powered flow meters"
         url="/news"
+        type="website"
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Blog",
-          "name": "Saher Flow Solutions News",
-          "description": "Latest news and updates from Saher Flow Solutions",
+          "@type": "CollectionPage",
+          "name": "Saher Flow Solutions News & Updates",
+          "description": "Latest news, announcements, and updates from Saher Flow Solutions - Saudi Aramco approved multiphase flow measurement technology",
           "url": "https://saherflow.com/news",
           "publisher": {
             "@type": "Organization",
-            "name": "Saher Flow Solutions"
-          },
-          "blogPost": articles.slice(0, 5).map(article => ({
-            "@type": "BlogPosting",
-            "headline": article.title,
-            "description": article.excerpt,
-            "image": article.image,
-            "datePublished": article.date,
-            "url": `https://saherflow.com/news#${article.slug}`,
-            "author": {
-              "@type": "Organization",
-              "name": "Saher Flow Solutions"
+            "@id": "https://saherflow.com/#organization",
+            "name": "Saher Flow Solutions",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://saherflow.com/wp-content/uploads/2021/06/Artboard-1-copy100.svg"
             }
-          }))
+          },
+          "about": {
+            "@type": "Thing",
+            "name": "Multiphase Flow Measurement",
+            "description": "Revolutionary DMOR technology for oil and gas industry"
+          },
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": articles.length,
+            "itemListElement": articles.slice(0, 10).map((article, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "NewsArticle",
+                "headline": article.title,
+                "description": article.excerpt,
+                "image": article.image,
+                "datePublished": article.date,
+                "url": `https://saherflow.com/news/${article.slug}`,
+                "author": {
+                  "@type": "Organization",
+                  "name": "Saher Flow Solutions"
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "Saher Flow Solutions"
+                }
+              }
+            }))
+          }
         }}
       />
       <NewsStructuredData articles={articles} />

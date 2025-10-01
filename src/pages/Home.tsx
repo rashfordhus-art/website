@@ -479,6 +479,18 @@ education: [
 },
 {
 id: 10,
+name: 'Layan Aljahdali',
+role: 'Quality Specialist',
+location: 'Thuwal, Saudi Arabia',
+image: '',
+description: 'Specialized in quality control, sustainability, and industrial processes. Experienced in prototyping and quality management practices.',
+longDescription: 'Specialized in quality control, sustainability, and industrial processes. Experienced in prototyping and quality management practices.',
+expertise: ['Prototyping', 'Sustainability', 'Quality Management'],
+achievements: ['Prototyping', 'Sustainability', 'Quality Management'],
+education: '',
+},
+{
+id: 11,
 name: 'Dr. Zubair Akhter',
 role: 'Senior Antenna / RF Engineer',
 location: 'Abu Dhabi, UAE',
@@ -507,7 +519,7 @@ education: [
 ]
 },
 {
-id: 11,
+id: 12,
 name: 'Babar Zia',
 role: 'Office Manager',
 location: 'Lahore, Pakistan',
@@ -519,11 +531,11 @@ achievements: ['10+ years operations experience', 'Process improvement initiativ
 education: 'MBA in Operations Management',
 },
 {
-id: 12,
+id: 13,
 name: 'Faizan Asif',
 role: 'Junior Embedded Design Engineer',
 location: 'Lahore, Pakistan',
-image: '',
+image: 'https://res.cloudinary.com/drnak5yb2/image/upload/v1759307849/WhatsApp_Image_2025-08-31_at_18.44.51_f6076ce7_aaqhzr.jpg',
 description: 'Electrical and Electronics Engineer specializing in embedded systems, firmware development, and digital design.',
 longDescription: 'Saad Mahmood is a software engineer at Saher Flow Solutions with a passion for building high-performance, maintainable, and user-centric applications. He brings hands-on experience in mobile and web development using Flutter, React, Node.js/Express, MongoDB, and PostgreSQL. Skilled in REST API design, third-party integrations, and end-to-end feature development, Saad has contributed to diverse projects, from Android apps at Lalaland.pk to backend API systems at DHA Lahore. He also has teaching experience in computer science and holds IBM certifications in DevOps, Cloud, Agile, and Full Stack Development. His approach emphasizes clean coding, scalability, and effective cross-functional collaboration within Agile environments.',
 expertise: [
@@ -537,7 +549,7 @@ achievements: [
 education: ''
 },
 {
-id: 13,
+id: 14,
 name: 'Saad Mahmood',
 role: 'Software Engineer',
 location: 'Lahore, Pakistan',

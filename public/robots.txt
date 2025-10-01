@@ -44,30 +44,74 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
-# AI Crawlers
+# AI Crawlers - ChatGPT, Claude, Gemini, Grok, etc.
 User-agent: GPTBot
 Allow: /
+Crawl-delay: 1
 
 User-agent: ChatGPT-User
 Allow: /
+Crawl-delay: 1
 
 User-agent: CCBot
 Allow: /
+Crawl-delay: 1
 
 User-agent: anthropic-ai
 Allow: /
+Crawl-delay: 1
 
 User-agent: Claude-Web
 Allow: /
+Crawl-delay: 1
+
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 1
 
 User-agent: PerplexityBot
 Allow: /
+Crawl-delay: 1
 
 User-agent: YouBot
 Allow: /
+Crawl-delay: 1
 
 User-agent: BingPreview
 Allow: /
+Crawl-delay: 1
+
+User-agent: Google-Extended
+Allow: /
+Crawl-delay: 1
+
+User-agent: GoogleOther
+Allow: /
+Crawl-delay: 1
+
+User-agent: Gemini
+Allow: /
+Crawl-delay: 1
+
+User-agent: GeminiBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Grok
+Allow: /
+Crawl-delay: 1
+
+User-agent: GrokBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Crawl-delay: 1
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+Crawl-delay: 1
 
 # Disallow admin areas (if any)
 Disallow: /admin/

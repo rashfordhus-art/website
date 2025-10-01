@@ -49,6 +49,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       
       {/* Robots */}
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+      <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
       
       {/* Canonical */}
       <link rel="canonical" href={canonicalUrl} />
@@ -94,12 +96,28 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="revisit-after" content="7 days" />
       <meta name="distribution" content="global" />
       <meta name="rating" content="general" />
+
+      {/* AI Search Engines */}
+      <meta name="AI-index" content="allow" />
+      <meta name="AI-crawl" content="allow" />
+      <meta name="referrer" content="origin-when-cross-origin" />
+
+      {/* Industry specific */}
+      <meta name="industry" content="Oil and Gas, Energy, Technology, Manufacturing" />
+      <meta name="target_country" content="SA, AE, KW, QA, BH, OM, US, EU" />
       
       {/* Geo Tags */}
       <meta name="geo.region" content="SA-14" />
       <meta name="geo.placename" content="Thuwal, Saudi Arabia" />
       <meta name="geo.position" content="22.308683;39.104413" />
       <meta name="ICBM" content="22.308683, 39.104413" />
+
+      {/* Business Information */}
+      <meta property="business:contact_data:street_address" content="KAUST, Building 1, Thuwal" />
+      <meta property="business:contact_data:locality" content="Thuwal" />
+      <meta property="business:contact_data:region" content="Makkah Province" />
+      <meta property="business:contact_data:postal_code" content="23955" />
+      <meta property="business:contact_data:country_name" content="Saudi Arabia" />
       
       {/* Structured Data */}
       {structuredData && (
