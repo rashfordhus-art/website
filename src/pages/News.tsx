@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, ArrowRight, Tag, Award, Users, TrendingUp, Building, X, ChevronLeft, ChevronRight, Clock, Eye, Share2, AlertCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Calendar, ArrowRight, Tag, Award, TrendingUp, Building, ChevronLeft, ChevronRight, Clock, Eye, AlertCircle } from 'lucide-react';
 import { loadAllNews, getNewsCategories, getNewsByCategory, NewsArticle } from '../utils/newsLoader';
 import SEOHead from '../components/SEOHead';
 import NewsletterSubscription from '../components/NewsletterSubscription';
@@ -44,12 +45,11 @@ const News: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [filteredArticles, setFilteredArticles] = useState<NewsArticle[]>([]);
-  const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const articlesPerSlide = 3;
+  const articlesPerPage = 12;
 
   // Load news data
   useEffect(() => {
@@ -60,22 +60,10 @@ const News: React.FC = () => {
           loadAllNews(),
           getNewsCategories()
         ]);
-        
+
         setArticles(newsArticles);
         setCategories(newsCategories);
         setFilteredArticles(newsArticles);
-        
-        // Check for article hash in URL
-        const hash = window.location.hash.substring(1);
-        if (hash) {
-          const article = newsArticles.find(a => a.slug === hash || a.id === hash);
-          if (article) {
-            setSelectedArticle(article);
-          }
-        }
-        
- 
-        
       } catch (err) {
         console.error('Error loading news:', err);
         setError(`Failed to load news articles: ${err instanceof Error ? err.message : 'Unknown error'}`);
@@ -121,7 +109,7 @@ const News: React.FC = () => {
       try {
         const filtered = await getNewsByCategory(selectedCategory);
         setFilteredArticles(filtered);
-        setCurrentSlide(0);
+        setCurrentPage(0);
       } catch (err) {
         console.error('Error filtering articles:', err);
       }
@@ -137,14 +125,13 @@ const News: React.FC = () => {
     target.src = 'https://images.pexels.com/photos/3862132/pexels-photo-3862132.jpeg?auto=compress&cs=tinysrgb&w=800';
   };
 
-  const nextSlide = () => {
-    const maxSlides = Math.ceil(filteredArticles.length / articlesPerSlide);
-    setCurrentSlide((prev) => (prev + 1) % maxSlides);
+  const nextPage = () => {
+    const maxPages = Math.ceil(filteredArticles.length / articlesPerPage);
+    setCurrentPage((prev) => Math.min(prev + 1, maxPages - 1));
   };
 
-  const prevSlide = () => {
-    const maxSlides = Math.ceil(filteredArticles.length / articlesPerSlide);
-    setCurrentSlide((prev) => (prev - 1 + maxSlides) % maxSlides);
+  const prevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
   };
 
   const getCategoryIcon = (category: string) => {
@@ -166,23 +153,6 @@ const News: React.FC = () => {
       month: 'long',
       day: 'numeric'
     });
-  };
-
-  const shareArticle = async (article: NewsArticle) => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: article.title,
-          text: article.excerpt,
-          url: `${window.location.origin}/news/${article.slug}`
-        });
-      } catch (err) {
-        console.log('Share was cancelled');
-      }
-    } else {
-      // Fallback to copying URL
-      navigator.clipboard.writeText(`${window.location.origin}/news/${article.slug}`);
-    }
   };
 
   if (loading) {
@@ -223,10 +193,10 @@ const News: React.FC = () => {
     );
   }
 
-  const totalSlides = Math.ceil(filteredArticles.length / articlesPerSlide);
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
   const currentArticles = filteredArticles.slice(
-    currentSlide * articlesPerSlide,
-    (currentSlide + 1) * articlesPerSlide
+    currentPage * articlesPerPage,
+    (currentPage + 1) * articlesPerPage
   );
 
   return (
@@ -336,14 +306,14 @@ const News: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="relative">
+              <div>
                 {/* Articles Grid */}
-                <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
                   {currentArticles.map((article, index) => (
-                    <article
+                    <Link
                       key={article.id || article.slug}
-                      className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:transform hover:scale-[1.02] cursor-pointer"
-                      onClick={() => setSelectedArticle(article)}
+                      to={`/news/${article.slug}`}
+                      className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:transform hover:scale-[1.02]"
                     >
                       {/* Image */}
                       <div className="aspect-video overflow-hidden relative">
@@ -384,16 +354,6 @@ const News: React.FC = () => {
                               {formatDate(article.date)}
                             </time>
                           </div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              shareArticle(article);
-                            }}
-                            className="text-gray-400 hover:text-navy-600 dark:hover:text-yellow-400 transition-colors"
-                            title="Share article"
-                          >
-                            <Share2 className="w-4 h-4" />
-                          </button>
                         </div>
 
                         {/* Title */}
@@ -408,52 +368,66 @@ const News: React.FC = () => {
 
                         {/* Read More */}
                         <div className="flex items-center justify-between">
-                          <button className="flex items-center gap-2 text-navy-600 dark:text-yellow-400 font-semibold hover:text-yellow-500 transition-colors duration-200 text-sm group-hover:gap-3">
+                          <div className="flex items-center gap-2 text-navy-600 dark:text-yellow-400 font-semibold transition-colors duration-200 text-sm group-hover:gap-3">
                             Read Full Article <ArrowRight className="w-4 h-4" />
-                          </button>
-                          
+                          </div>
+
                           <div className="text-xs text-gray-400 dark:text-gray-500">
                             {Math.ceil(article.content.length / 1000)} min read
                           </div>
                         </div>
                       </div>
-                    </article>
+                    </Link>
                   ))}
                 </div>
 
-                {/* Navigation */}
-                {totalSlides > 1 && (
-                  <div className="flex justify-center items-center gap-4 mt-12">
-                    <button
-                      onClick={prevSlide}
-                      className="bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
-                      disabled={currentSlide === 0}
-                    >
-                      <ChevronLeft className="w-6 h-6 text-navy-900 dark:text-white" />
-                    </button>
-
-                    {/* Slide Indicators */}
-                    <div className="flex gap-2">
-                      {Array.from({ length: totalSlides }).map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentSlide(index)}
-                          className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                            currentSlide === index
-                              ? 'bg-navy-600 w-8'
-                              : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400'
-                          }`}
-                        />
-                      ))}
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex flex-col items-center gap-6">
+                    {/* Page Info */}
+                    <div className="text-center">
+                      <p className="text-gray-600 dark:text-gray-400">
+                        Showing {currentPage * articlesPerPage + 1} - {Math.min((currentPage + 1) * articlesPerPage, filteredArticles.length)} of {filteredArticles.length} articles
+                      </p>
                     </div>
 
-                    <button
-                      onClick={nextSlide}
-                      className="bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
-                      disabled={currentSlide === totalSlides - 1}
-                    >
-                      <ChevronRight className="w-6 h-6 text-navy-900 dark:text-white" />
-                    </button>
+                    {/* Pagination Controls */}
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={prevPage}
+                        className="bg-white dark:bg-gray-800 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium text-navy-900 dark:text-white"
+                        disabled={currentPage === 0}
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                        Previous
+                      </button>
+
+                      {/* Page Numbers */}
+                      <div className="flex gap-2">
+                        {Array.from({ length: totalPages }).map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentPage(index)}
+                            className={`w-10 h-10 rounded-lg font-semibold transition-all duration-300 ${
+                              currentPage === index
+                                ? 'bg-navy-600 text-white shadow-lg scale-110'
+                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            }`}
+                          >
+                            {index + 1}
+                          </button>
+                        ))}
+                      </div>
+
+                      <button
+                        onClick={nextPage}
+                        className="bg-white dark:bg-gray-800 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium text-navy-900 dark:text-white"
+                        disabled={currentPage === totalPages - 1}
+                      >
+                        Next
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -480,245 +454,6 @@ const News: React.FC = () => {
           </div>
         </div>
 
-        {/* Admin Panel */}
-        
-        {selectedArticle && (
-          <div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
-            onClick={(e) => {
-              // Close modal when clicking on backdrop
-              if (e.target === e.currentTarget) {
-                setSelectedArticle(null);
-              }
-            }}
-          >
-            <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="relative">
-                <img
-                  src={selectedArticle.image}
-                  alt={selectedArticle.title}
-                  className="w-full h-64 lg:h-80 object-cover rounded-t-2xl"
-                  onError={handleImageError}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-t-2xl"></div>
-                
-                <button
-                  onClick={() => setSelectedArticle(null)}
-                  className="absolute top-4 right-4 bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white p-3 rounded-full hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 backdrop-blur-sm shadow-lg hover:shadow-xl z-10"
-                  aria-label="Close article"
-                >
-                  <X size={24} />
-                </button>
-
-                {/* Article Meta on Image */}
-                <div className="absolute bottom-4 left-6 right-6">
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full">
-                      {getCategoryIcon(selectedArticle.category)}
-                      {selectedArticle.category}
-                    </div>
-                    <div className="flex items-center gap-2 text-white/90">
-                      <Calendar className="w-4 h-4" />
-                      <time dateTime={selectedArticle.date}>
-                        {formatDate(selectedArticle.date)}
-                      </time>
-                    </div>
-                  </div>
-                  
-                  <h1 className="text-2xl lg:text-4xl font-bold text-white leading-tight">
-                    {selectedArticle.title}
-                  </h1>
-                </div>
-              </div>
-
-              <div className="p-6 lg:p-8">
-                {/* Article Content */}
-                <div 
-                  className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-navy-900 dark:prose-headings:text-white prose-a:text-navy-600 dark:prose-a:text-yellow-400 prose-strong:text-navy-900 dark:prose-strong:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300"
-                  dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
-                />
-                <style jsx>{`
-                  .prose {
-                    line-height: 1.8;
-                  }
-                  .prose h1 {
-                    font-size: 2.5rem;
-                    font-weight: 800;
-                    margin-top: 2rem;
-                    margin-bottom: 1.5rem;
-                    color: #1a3a5c;
-                  }
-                  .prose h2 {
-                    font-size: 2rem;
-                    font-weight: 700;
-                    margin-top: 2rem;
-                    margin-bottom: 1rem;
-                    color: #1a3a5c;
-                    border-bottom: 2px solid #ffd500;
-                    padding-bottom: 0.5rem;
-                  }
-                  .prose h3 {
-                    font-size: 1.5rem;
-                    font-weight: 600;
-                    margin-top: 1.5rem;
-                    margin-bottom: 0.75rem;
-                    color: #1a3a5c;
-                  }
-                  .prose p {
-                    margin-bottom: 1.5rem;
-                    font-size: 1.1rem;
-                    line-height: 1.8;
-                    color: #374151 !important;
-                  }
-                  .dark .prose p {
-                    color: #d1d5db !important;
-                  }
-                  .prose ul, .prose ol {
-                    margin: 1.5rem 0;
-                    padding-left: 2rem;
-                  }
-                  .prose li {
-                    margin-bottom: 0.75rem;
-                    font-size: 1.1rem;
-                    line-height: 1.7;
-                    color: #374151 !important;
-                  }
-                  .dark .prose li {
-                    color: #d1d5db !important;
-                  }
-                  .prose blockquote {
-                    border-left: 4px solid #ffd500;
-                    background: #f9fafb;
-                    padding: 1.5rem 2rem;
-                    margin: 2rem 0;
-                    font-style: italic;
-                    font-size: 1.2rem;
-                    color: #1a3a5c;
-                  }
-                  .prose table {
-                    width: 100%;
-                    margin: 2rem 0;
-                    border-collapse: collapse;
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                    border-radius: 0.5rem;
-                    overflow: hidden;
-                  }
-                  .prose th {
-                    background: #1a3a5c;
-                    color: white;
-                    padding: 1rem;
-                    text-align: left;
-                    font-weight: 600;
-                  }
-                  .prose td {
-                    padding: 1rem;
-                    border-bottom: 1px solid #e5e7eb;
-                  }
-                  .prose tr:nth-child(even) {
-                    background: #f9fafb;
-                  }
-                  .prose code {
-                    background: #f3f4f6;
-                    padding: 0.25rem 0.5rem;
-                    border-radius: 0.25rem;
-                    font-family: 'Monaco', 'Menlo', monospace;
-                    font-size: 0.9rem;
-                    color: #1a3a5c;
-                  }
-                  .prose pre {
-                    background: #1f2937;
-                    color: #f9fafb;
-                    padding: 1.5rem;
-                    border-radius: 0.5rem;
-                    overflow-x: auto;
-                    margin: 2rem 0;
-                  }
-                  .prose img {
-                    border-radius: 0.5rem;
-                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-                    margin: 2rem 0;
-                    max-width: 100%;
-                    height: auto;
-                  }
-                  .prose a {
-                    color: #1a3a5c;
-                    text-decoration: underline;
-                    text-decoration-color: #ffd500;
-                    text-underline-offset: 3px;
-                    font-weight: 500;
-                  }
-                  .prose a:hover {
-                    color: #ffd500;
-                  }
-                  .prose strong {
-                    font-weight: 700;
-                    color: #1a3a5c;
-                  }
-                  .prose em {
-                    font-style: italic;
-                    color: #374151;
-                  }
-                  .dark .prose h1,
-                  .dark .prose h2,
-                  .dark .prose h3 {
-                    color: white !important;
-                  }
-                  .dark .prose strong {
-                    color: #ffd500 !important;
-                  }
-                  .dark .prose em {
-                    color: #d1d5db !important;
-                  }
-                  .dark .prose blockquote {
-                    background: #374151;
-                    color: #f9fafb !important;
-                  }
-                  .dark .prose th {
-                    background: #374151;
-                  }
-                  .dark .prose tr:nth-child(even) {
-                    background: #374151;
-                  }
-                  .dark .prose td {
-                    color: #d1d5db !important;
-                  }
-                  .dark .prose code {
-                    background: #374151;
-                    color: #ffd500;
-                  }
-                `}</style>
-
-                {/* Share Actions */}
-                <div className="flex items-center justify-between pt-8 mt-8 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center gap-4">
-                    <span className="text-gray-600 dark:text-gray-400">Share this article:</span>
-                    <button
-                      onClick={() => shareArticle(selectedArticle)}
-                      className="flex items-center gap-2 text-navy-600 dark:text-yellow-400 hover:text-navy-700 dark:hover:text-yellow-300 transition-colors"
-                    >
-                      <Share2 className="w-4 h-4" />
-                      Share
-                    </button>
-                  </div>
-                  
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {Math.ceil(selectedArticle.content.length / 1000)} minute read
-                  </div>
-                </div>
-                
-                {/* Close Button at Bottom for Better UX */}
-                <div className="flex justify-center pt-6">
-                  <button
-                    onClick={() => setSelectedArticle(null)}
-                    className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
-                  >
-                    Close Article
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </section>
     </>
   );

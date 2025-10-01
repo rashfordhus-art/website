@@ -2,7 +2,7 @@
 title: "Saher Flow Solutions Named KPMG Global Tech Innovator Finalist"
 date: "2025-01-23"
 category: "Awards"
-image: "https://res.cloudinary.com/drnak5yb2/image/upload/v1757491425/Screenshot_2025-09-10_111941_o9uvf1.png"
+image: "https://res.cloudinary.com/drnak5yb2/image/upload/v1759308370/1757515352499_dgyec4.jpg"
 excerpt: "Proud to be one of 9 finalists from Saudi Arabia for the KPMG Global Tech Innovator competition, representing the Kingdom's innovation in Industry 4.0."
 featured: true
 ---
